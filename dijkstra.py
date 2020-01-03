@@ -1,25 +1,27 @@
 def dijkstra(graph, source):
-    Q, inf, nan, disconnect= set(), float('Inf'), float('NaN'), []
-    dist, prev, n= [], [], len(graph)
-    for v in range(n):
+    Q= set()                                #set of unvisited vertices
+    inf, nan= float('Inf'), float('NaN')    #constant values
+    disconnect= []                          #list of unreachable vertices
+    dist, prev= [], []                      #return values
+    n= len(graph)                           #number of vertices in graph
+    for v in range(n):                      #initialize Q, dist and prev
         dist.append(inf)
         prev.append(nan)
         Q.add(v)
-    dist[source]= 0
-    while len(Q):
-        temp= inf
-        for i in Q:
+    dist[source], prev[source]= 0, nan      #initialize values of source vertex
+    while len(Q):                           #loop for finding next connection
+        temp= inf                           #minimum distance of Q
+        for i in Q:                         #loop for finding vertex with minimum dist
             if dist[i]<=temp:
                 u, temp= i, dist[i]
-        if temp==inf:
+        if temp==inf:                       #for unreachable vertices
             disconnect.append(u)
         Q.remove(u)
-        for v in range(n):
+        for v in range(n):                  #to calculate new values of dist
             if v!=u and graph[v][u]:
-                alt= dist[u] + graph[u][v]
-                if alt < dist[v]:
-                    dist[v]= alt
-                    prev[v]= u
+                ctrl= dist[u] + graph[u][v]
+                if ctrl < dist[v]:
+                    dist[v], prev[v]= ctrl, u
     if disconnect: print('The input graph is disconnected and vertices {} are unreachable from source!'.format(*disconnect))
     return dist, prev
 
